@@ -27,6 +27,6 @@ sudo add-apt-repository \
   stable"
 
 # Install Docker Engine and containerd:
-sudo apt install docker-ce docker-ce-cli containerd.io
+sudo apt install -y docker-ce docker-ce-cli containerd.io
 ```
 
