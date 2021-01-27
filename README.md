@@ -20,7 +20,7 @@ curl https://releases.rancher.com/install-docker/19.03.sh | sh
 ```
 ---
 
-#### Setup Rancher
+### Setup Rancher
 
 Start RKE cluster:
 ```bash
@@ -52,7 +52,7 @@ kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.9.5/manife
 kubectl create secret generic -n metallb-system memberlist --from-literal=secretkey="$(openssl rand -base64 128)"
 ```
 
-Setup IP range. Giving only 1 IP which is of the node IP
+Setup IP range. Giving only 1 IP which is of the node IP:
 ```bash
 kubectl create -f - << EOF
 apiVersion: v1
@@ -71,7 +71,7 @@ EOF
 ```
 > type can also be `ExternalIP` based on your node
 
-create namespace
+Install Nginx Ingress:
 ```bash
 # Create new namespace
 kubectl create namespace nginx-ingress
