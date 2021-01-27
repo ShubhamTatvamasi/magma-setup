@@ -7,6 +7,11 @@ Upgrade all the packages:
 sudo apt update && sudo apt upgrade -y
 ```
 
+Disable swap:
+```bash
+sudo swapoff -a
+```
+
 Install docker for rancher:
 ```bash
 curl https://releases.rancher.com/install-docker/19.03.sh | sh
