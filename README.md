@@ -7,7 +7,7 @@ Upgrade all the packages:
 sudo apt update && sudo apt upgrade -y
 ```
 
-Install docker:
+Install docker for rancher:
 ```bash
 curl https://releases.rancher.com/install-docker/19.03.sh | sh
 ```
