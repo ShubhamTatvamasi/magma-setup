@@ -75,3 +75,16 @@ helm install rancher rancher-stable/rancher \
   --set letsEncrypt.email=info@shubhamtatvamasi.com \
   --version=2.5.5
 ```
+
+Enable websocket for rancher ingress:
+```bash
+kubectl patch ingress rancher -n cattle-system \
+  --patch='{
+    "metadata": {
+      "annotations": {
+        "nginx.org/websocket-services": "rancher"
+      }
+    }
+  }'
+```
+
