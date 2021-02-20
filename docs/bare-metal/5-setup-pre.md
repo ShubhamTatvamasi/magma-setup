@@ -2,8 +2,15 @@
 
 Things to install:
 
+- nfs
 - metallb-system
 - cert-manager
+
+
+Install the following package on node:
+```bash
+sudo apt install -y nfs-common
+```
 
 Namespace for mariadb and magma
 ```bash
@@ -89,11 +96,11 @@ helm install mariadb bitnami/mariadb \
   --wait
 
 # NEW: for testing
-helm install mariadb bitnami/mariadb \
-  --namespace mariadb \
-  --version 9.3.1 \
-  --set auth.rootPassword=$db_root_password \
-  --wait
+# helm install mariadb bitnami/mariadb \
+#   --namespace mariadb \
+#   --version 9.3.1 \
+#   --set auth.rootPassword=$db_root_password \
+#   --wait
 ```
 
 Setup databases:
@@ -106,11 +113,11 @@ kubectl exec -it mariadb-master-0 \
   -- mysql -u root --password=$db_root_password < $magma_secrets/db_setup.sql
 
 # SSH to POD
-kubectl exec -it mariadb-master-0 -n mariadb -- mysql -u root --password=$db_root_password
+# kubectl exec -it mariadb-master-0 -n mariadb -- mysql -u root --password=$db_root_password
 # Run the following commands on database:
-SELECT @@sql_mode;
-SET sql_mode = 'ANSI_QUOTES';
-SET GLOBAL sql_mode = 'ANSI_QUOTES';
+# SELECT @@sql_mode;
+# SET sql_mode = 'ANSI_QUOTES';
+# SET GLOBAL sql_mode = 'ANSI_QUOTES';
 ```
 
 
@@ -148,6 +155,16 @@ Pass: `password`
 Import this file:
 Chrome settings (Settings > Manage certificates > Your Certificates > Import)
 https://api.magma.shubhamtatvamasi.com/apidocs/v1/
+
+Test API
+```bash
+MAGMA_CERTS="/home/shubham/magma-secrets/certs"
+
+curl -k \
+  --cert $MAGMA_CERTS/admin_operator.pem \
+  --key $MAGMA_CERTS/admin_operator.key.pem \
+  https://api.magma.shubhamtatvamasi.com
+```
 
 Setup admin user:
 ```bash
