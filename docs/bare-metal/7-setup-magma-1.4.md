@@ -7,7 +7,7 @@ export magma_root=/home/shubham/git/magma
 export scripts=$magma_root/orc8r/cloud/deploy/scripts
 export db_root_password=password
 export postgresql_password=postgres
-export namespace=magma
+export namespace=orc8r
 export magma_secrets=~/magma-secrets/certs
 export db_setup=~/magma-secrets
 export nms_db_user=magma
@@ -54,24 +54,24 @@ kubectl exec -it mariadb-master-0 \
   -- mysql -u root --password=$db_root_password < $db_setup/db_setup.sql
 ```
 
-  --set metrics.enabled=false \
-  --set nginx.service.type=LoadBalancer \
-  --set secrets.secret.certs.enabled=true \
-  --set secrets.secret.certs=orc8r-secrets-certs \
-
 ```bash
 helm install orc8r shubhamtatvamasi/orc8r \
+  --version 1.5.12 \
   --namespace $namespace \
   --set metrics.enabled=false \
   --set nms.magmalte.image.repository=shubhamtatvamasi/magmalte \
   --set nms.magmalte.image.tag=v1.4 \
   --set nms.nginx.service.type=LoadBalancer \
   --set nms.secret.certs=orc8r-secrets-certs \
+  --set nms.magmalte.env.mysql_host=mariadb.orc8r.svc.cluster.local \
+  --set nms.magmalte.env.api_host=api.magma.shubhamtatvamasi.com \
   --set nginx.image.repository=shubhamtatvamasi/nginx \
   --set nginx.image.tag=v1.4 \
-  --set nginx.spec.hostname=$dns_domain \
+  --set nginx.spec.hostname=controller.magma.shubhamtatvamasi.com \
+  --set nginx.service.type=LoadBalancer \
   --set controller.image.repository=shubhamtatvamasi/controller \
   --set controller.image.tag=v1.4 \
+  --set controller.spec.service_registry.mode=k8s \
   --set secrets.create=true \
   --set secrets.secret.certs.enabled=true \
   --set-file secrets.secret.certs.files."rootCA\.pem"=$magma_secrets/rootCA.pem \
@@ -103,6 +103,7 @@ Install lte-orc8r:
 ```bash
 helm install lte-orc8r shubhamtatvamasi/lte-orc8r \
   --namespace $namespace \
+  --set controller.spec.service_registry.mode=k8s \
   --set controller.image.repository=shubhamtatvamasi/controller \
   --set controller.image.tag=v1.4
 ```
@@ -111,6 +112,7 @@ Install feg-orc8r:
 ```bash
 helm install feg-orc8r shubhamtatvamasi/feg-orc8r \
   --namespace $namespace \
+  --set controller.spec.service_registry.mode=k8s \
   --set controller.image.repository=shubhamtatvamasi/controller \
   --set controller.image.tag=v1.4
 ```
@@ -119,6 +121,7 @@ Install fbinternal-orc8r:
 ```bash
 helm install fbinternal-orc8r shubhamtatvamasi/fbinternal-orc8r \
   --namespace $namespace \
+  --set controller.spec.service_registry.mode=k8s \
   --set controller.image.repository=shubhamtatvamasi/controller \
   --set controller.image.tag=v1.4
 ```
@@ -127,6 +130,7 @@ Install wifi-orc8r:
 ```
 helm install wifi-orc8r shubhamtatvamasi/wifi-orc8r \
   --namespace $namespace \
+  --set controller.spec.service_registry.mode=k8s \
   --set controller.image.repository=shubhamtatvamasi/controller \
   --set controller.image.tag=v1.4
 ```
@@ -135,25 +139,16 @@ Install: cwf-orc8r
 ```
 helm install cwf-orc8r shubhamtatvamasi/cwf-orc8r \
   --namespace $namespace \
+  --set controller.spec.service_registry.mode=k8s \
   --set controller.image.repository=shubhamtatvamasi/controller \
   --set controller.image.tag=v1.4
 ```
 
-Check status:
-```bash
-kubectl exec -it -n magma \
-    $(kubectl get pod -n magma \
-    -l app.kubernetes.io/component=orchestrator \
-    -o jsonpath="{.items[0].metadata.name}") -- supervisorctl status
-```
-
-
 Setup admin user:
 ```bash
-export ORC_POD=$(kubectl -n magma get pod -l app.kubernetes.io/component=orchestrator -o jsonpath='{.items[0].metadata.name}')
-export NMS_POD=$(kubectl -n magma get pod -l app.kubernetes.io/component=magmalte -o jsonpath='{.items[0].metadata.name}')
+export ORC_POD=$(kubectl -n $namespace get pod -l app.kubernetes.io/component=orchestrator -o jsonpath='{.items[0].metadata.name}')
+export NMS_POD=$(kubectl -n $namespace get pod -l app.kubernetes.io/component=magmalte -o jsonpath='{.items[0].metadata.name}')
 
-kubectl -n magma exec -it ${ORC_POD} -- envdir /var/opt/magma/envdir /var/opt/magma/bin/accessc add-existing -admin -cert /var/opt/magma/certs/admin_operator.pem admin_operator
-kubectl -n magma exec -it ${NMS_POD} -- yarn setAdminPassword master admin admin
+kubectl -n $namespace exec -it ${ORC_POD} -- envdir /var/opt/magma/envdir /var/opt/magma/bin/accessc add-existing -admin -cert /var/opt/magma/certs/admin_operator.pem admin_operator
+kubectl -n $namespace exec -it ${NMS_POD} -- yarn setAdminPassword master admin admin
 ```
-
