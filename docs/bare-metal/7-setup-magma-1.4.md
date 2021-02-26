@@ -39,14 +39,18 @@ helm install postgresql bitnami/postgresql \
   --set fullnameOverride=postgresql
 ```
 
-Install mariadb:
+Install mysql:
 ```bash
-helm install mariadb bitnami/mariadb \
-  --namespace $namespace \
-  --version 7.3.14 \
-  --set image.tag=10.3.22-debian-10-r27 \
-  --set master.extraFlags="--sql-mode=ANSI_QUOTES" \
-  --set rootUser.password=$db_root_password
+# helm install mariadb bitnami/mariadb \
+#   --namespace $namespace \
+#   --version 7.3.14 \
+#   --set image.tag=10.3.22-debian-10-r27 \
+#   --set master.extraFlags="--sql-mode=ANSI_QUOTES" \
+#   --set rootUser.password=$db_root_password
+
+helm install mysql bitnami/mysql \
+  --version 8.4.3 \
+  --set auth.rootPassword=$db_root_password
 ```
 
 Setup mariadb:
@@ -54,13 +58,12 @@ Setup mariadb:
 curl -sL https://github.com/magma/magma/raw/v1.4/orc8r/cloud/deploy/bare-metal/db_setup.sql.tpl | \
   envsubst > $db_setup/db_setup.sql
 
-kubectl exec -it mariadb-master-0 \
+kubectl exec -it mysql-0 \
   --namespace $namespace \
   -- mysql -u root --password=$db_root_password < $db_setup/db_setup.sql
 ```
 
-  --version 1.5.12 \
-
+Install orc8r:
 ```bash
 helm install orc8r $helm_repo/orc8r \
   --namespace $namespace \
@@ -69,7 +72,7 @@ helm install orc8r $helm_repo/orc8r \
   --set nms.magmalte.image.tag=$nms_tag \
   --set nms.nginx.service.type=LoadBalancer \
   --set nms.secret.certs=orc8r-secrets-certs \
-  --set nms.magmalte.env.mysql_host=mariadb.orc8r.svc.cluster.local \
+  --set nms.magmalte.env.mysql_host=mysql.orc8r.svc.cluster.local \
   --set nms.magmalte.env.api_host=api.magma.shubhamtatvamasi.com \
   --set nginx.image.repository=$img_repo/nginx \
   --set nginx.image.tag=$nginx_tag \
