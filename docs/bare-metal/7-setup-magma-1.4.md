@@ -14,6 +14,11 @@ export nms_db_user=magma
 export nms_db_pass=password
 export orc8r_db_user=orc8r
 export orc8r_db_pass=password
+export img_repo=shubhamtatvamasi
+export controller_tag=1.4.0-beta.1
+export nms_tag=1.4.0-beta.1
+export nginx_tag=1.4.0-beta.1
+export helm_repo=magma
 
 $ mkdir $magma_secrets && \
     cp -r <secrets>/* $magma_secrets/
@@ -46,7 +51,7 @@ helm install mariadb bitnami/mariadb \
 
 Setup mariadb:
 ```bash
-curl -sL https://github.com/magma/magma/raw/master/orc8r/cloud/deploy/bare-metal/db_setup.sql.tpl | \
+curl -sL https://github.com/magma/magma/raw/v1.4/orc8r/cloud/deploy/bare-metal/db_setup.sql.tpl | \
   envsubst > $db_setup/db_setup.sql
 
 kubectl exec -it mariadb-master-0 \
@@ -54,24 +59,24 @@ kubectl exec -it mariadb-master-0 \
   -- mysql -u root --password=$db_root_password < $db_setup/db_setup.sql
 ```
 
-```bash
-helm install orc8r shubhamtatvamasi/orc8r \
   --version 1.5.12 \
+
+```bash
+helm install orc8r $helm_repo/orc8r \
   --namespace $namespace \
   --set metrics.enabled=false \
-  --set nms.magmalte.image.repository=shubhamtatvamasi/magmalte \
-  --set nms.magmalte.image.tag=v1.4 \
+  --set nms.magmalte.image.repository=$img_repo/magmalte \
+  --set nms.magmalte.image.tag=$nms_tag \
   --set nms.nginx.service.type=LoadBalancer \
   --set nms.secret.certs=orc8r-secrets-certs \
   --set nms.magmalte.env.mysql_host=mariadb.orc8r.svc.cluster.local \
   --set nms.magmalte.env.api_host=api.magma.shubhamtatvamasi.com \
-  --set nginx.image.repository=shubhamtatvamasi/nginx \
-  --set nginx.image.tag=v1.4 \
+  --set nginx.image.repository=$img_repo/nginx \
+  --set nginx.image.tag=$nginx_tag \
   --set nginx.spec.hostname=controller.magma.shubhamtatvamasi.com \
   --set nginx.service.type=LoadBalancer \
-  --set controller.image.repository=shubhamtatvamasi/controller \
-  --set controller.image.tag=v1.4 \
-  --set controller.spec.service_registry.mode=k8s \
+  --set controller.image.repository=$img_repo/controller \
+  --set controller.image.tag=$controller_tag \
   --set secrets.create=true \
   --set secrets.secret.certs.enabled=true \
   --set-file secrets.secret.certs.files."rootCA\.pem"=$magma_secrets/rootCA.pem \
@@ -101,47 +106,42 @@ kubectl edit deploy orc8r-nginx
 
 Install lte-orc8r:
 ```bash
-helm install lte-orc8r shubhamtatvamasi/lte-orc8r \
+helm install lte-orc8r $helm_repo/lte-orc8r \
   --namespace $namespace \
-  --set controller.spec.service_registry.mode=k8s \
-  --set controller.image.repository=shubhamtatvamasi/controller \
-  --set controller.image.tag=v1.4
+  --set controller.image.repository=$img_repo/controller \
+  --set controller.image.tag=$controller_tag
 ```
 
 Install feg-orc8r:
 ```bash
-helm install feg-orc8r shubhamtatvamasi/feg-orc8r \
+helm install feg-orc8r $helm_repo/feg-orc8r \
   --namespace $namespace \
-  --set controller.spec.service_registry.mode=k8s \
-  --set controller.image.repository=shubhamtatvamasi/controller \
-  --set controller.image.tag=v1.4
+  --set controller.image.repository=$img_repo/controller \
+  --set controller.image.tag=$controller_tag
 ```
 
 Install fbinternal-orc8r:
 ```bash
-helm install fbinternal-orc8r shubhamtatvamasi/fbinternal-orc8r \
+helm install fbinternal-orc8r $helm_repo/fbinternal-orc8r \
   --namespace $namespace \
-  --set controller.spec.service_registry.mode=k8s \
-  --set controller.image.repository=shubhamtatvamasi/controller \
-  --set controller.image.tag=v1.4
+  --set controller.image.repository=$img_repo/controller \
+  --set controller.image.tag=$controller_tag
 ```
 
 Install wifi-orc8r:
-```
-helm install wifi-orc8r shubhamtatvamasi/wifi-orc8r \
+```bash
+helm install wifi-orc8r $helm_repo/wifi-orc8r \
   --namespace $namespace \
-  --set controller.spec.service_registry.mode=k8s \
-  --set controller.image.repository=shubhamtatvamasi/controller \
-  --set controller.image.tag=v1.4
+  --set controller.image.repository=$img_repo/controller \
+  --set controller.image.tag=$controller_tag
 ```
 
 Install: cwf-orc8r
-```
-helm install cwf-orc8r shubhamtatvamasi/cwf-orc8r \
+```bash
+helm install cwf-orc8r $helm_repo/cwf-orc8r \
   --namespace $namespace \
-  --set controller.spec.service_registry.mode=k8s \
-  --set controller.image.repository=shubhamtatvamasi/controller \
-  --set controller.image.tag=v1.4
+  --set controller.image.repository=$img_repo/controller \
+  --set controller.image.tag=$controller_tag
 ```
 
 Setup admin user:

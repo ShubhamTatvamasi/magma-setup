@@ -3,11 +3,12 @@
 
 setup parameters:
 ```bash
-export MAGMA_ROOT=/tmp/magma
+export MAGMA_ROOT=/tmp/magma-new/magma
 export PUBLISH=$MAGMA_ROOT/orc8r/tools/docker/publish.sh
 export REGISTRY=shubhamtatvamasi
-export MAGMA_TAG=1.3.3
+export MAGMA_TAG=1.4.0-beta.1
 ```
+> comment the docker login part in publish.sh
 
 build and push nginx and controller docker image:
 ```bash
