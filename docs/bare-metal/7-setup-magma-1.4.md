@@ -73,7 +73,7 @@ helm install orc8r $helm_repo/orc8r \
   --set nms.nginx.service.type=LoadBalancer \
   --set nms.secret.certs=orc8r-secrets-certs \
   --set nms.magmalte.env.mysql_host=mysql.orc8r.svc.cluster.local \
-  --set nms.magmalte.env.api_host=api.magma.shubhamtatvamasi.com \
+  --set nms.magmalte.env.api_host=orc8r-nginx-proxy.orc8r.svc.cluster.local \
   --set nginx.image.repository=$img_repo/nginx \
   --set nginx.image.tag=$nginx_tag \
   --set nginx.spec.hostname=controller.magma.shubhamtatvamasi.com \
