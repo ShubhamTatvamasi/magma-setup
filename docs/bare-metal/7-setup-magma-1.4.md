@@ -8,8 +8,8 @@ export scripts=$magma_root/orc8r/cloud/deploy/scripts
 export db_root_password=password
 export postgresql_password=postgres
 export namespace=orc8r
-export magma_secrets=~/magma-secrets/certs
-export db_setup=~/magma-secrets
+export magma_secrets=~/myfiles/magma-secrets/certs
+export db_setup=~/myfiles/magma-secrets
 export nms_db_user=magma
 export nms_db_pass=password
 export orc8r_db_user=orc8r
@@ -63,11 +63,16 @@ kubectl exec -it mysql-0 \
   -- mysql -u root --password=$db_root_password < $db_setup/db_setup.sql
 ```
 
+Setup Volumes for metrics:
+```bash
+cd $magma_root/orc8r/cloud/deploy/bare-metal
+./make_magma_pvcs.sh $namespace nfs
+```
+
 Install orc8r:
 ```bash
 helm install orc8r $helm_repo/orc8r \
   --namespace $namespace \
-  --set metrics.enabled=false \
   --set nms.magmalte.image.repository=$img_repo/magmalte \
   --set nms.magmalte.image.tag=$nms_tag \
   --set nms.nginx.service.type=LoadBalancer \
@@ -80,6 +85,17 @@ helm install orc8r $helm_repo/orc8r \
   --set nginx.service.type=LoadBalancer \
   --set controller.image.repository=$img_repo/controller \
   --set controller.image.tag=$controller_tag \
+  --set metrics.prometheus.create=true \
+  --set metrics.prometheusCache.create=true \
+  --set metrics.prometheusConfigurer.create=true \
+  --set metrics.alertmanager.create=true \
+  --set metrics.alertmanagerConfigurer.create=true \
+  --set metrics.metrics.volumes.prometheusConfig.volumeSpec.persistentVolumeClaim.claimName=promcfg \
+  --set metrics.metrics.volumes.prometheusData.volumeSpec.persistentVolumeClaim.claimName=promdata \
+  --set metrics.userGrafana.volumes.datasources.persistentVolumeClaim.claimName=grafanadatasources \
+  --set metrics.userGrafana.volumes.dashboardproviders.persistentVolumeClaim.claimName=grafanaproviders \
+  --set metrics.userGrafana.volumes.dashboards.persistentVolumeClaim.claimName=grafanadashboards \
+  --set metrics.userGrafana.volumes.grafanaData.persistentVolumeClaim.claimName=grafanadata \
   --set secrets.create=true \
   --set secrets.secret.certs.enabled=true \
   --set-file secrets.secret.certs.files."rootCA\.pem"=$magma_secrets/rootCA.pem \
