@@ -25,3 +25,26 @@ check if magma is installed:
 ```bash
 sudo dpkg -l | grep magma
 ```
+
+### AGW Config
+
+Need these to files to start:
+```
+/var/opt/magma/certs/rootCA.pem
+/var/opt/magma/configs/control_proxy.yml
+```
+
+Check your magma service status:
+```bash
+sudo service magma@magmad status
+sudo service magma@magmad start
+sudo service magma@* stop
+sudo service magma@magmad restart
+```
+
+https://docs.magmacore.org/docs/next/lte/config_agw
+
+Check connection:
+```bash
+sudo journalctl -u magma@magmad -f
+```
