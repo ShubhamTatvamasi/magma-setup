@@ -19,4 +19,9 @@ HOST [magma]$ cd lte/gateway
 HOST [magma/lte/gateway]$ fab -f dev_tools.py register_vm
 ```
 
+https://docs.magmacore.org/docs/next/lte/config_agw#access-gateway-configuration-1
 
+check if magma is installed:
+```bash
+sudo dpkg -l | grep magma
+```
