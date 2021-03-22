@@ -15,10 +15,10 @@ export nms_db_pass=password
 export orc8r_db_user=orc8r
 export orc8r_db_pass=password
 export img_repo=shubhamtatvamasi
-export controller_tag=1.4.0-beta.1
-export nms_tag=1.4.0-beta.1
-export nginx_tag=1.4.0-beta.1
-export helm_repo=magma
+export controller_tag=1.4.0
+export nms_tag=1.4.0
+export nginx_tag=1.4.0
+export helm_repo=magma-charts-140
 
 $ mkdir $magma_secrets && \
     cp -r <secrets>/* $magma_secrets/
@@ -116,6 +116,20 @@ helm install orc8r $helm_repo/orc8r \
   --set secrets.docker.password=password
 ```
 
+generate template:
+```bash
+helm template orc8r magma-charts-140/orc8r \
+  --version 1.5.16 \
+  -f values.yaml
+```
+
+Upgrade orc8r:
+```bash
+helm upgrade -i orc8r magma-charts-140/orc8r \
+  --version 1.5.16 \
+  -f values.yaml
+```
+
 Updated the env:
 ```bash
 # Update env PROXY_BACKENDS
@@ -125,7 +139,7 @@ kubectl edit deploy orc8r-nginx
 
 Install lte-orc8r:
 ```bash
-helm install lte-orc8r $helm_repo/lte-orc8r \
+helm upgrade -i lte-orc8r $helm_repo/lte-orc8r \
   --namespace $namespace \
   --set controller.image.repository=$img_repo/controller \
   --set controller.image.tag=$controller_tag
@@ -133,7 +147,7 @@ helm install lte-orc8r $helm_repo/lte-orc8r \
 
 Install feg-orc8r:
 ```bash
-helm install feg-orc8r $helm_repo/feg-orc8r \
+helm upgrade -i feg-orc8r $helm_repo/feg-orc8r \
   --namespace $namespace \
   --set controller.image.repository=$img_repo/controller \
   --set controller.image.tag=$controller_tag
@@ -141,7 +155,7 @@ helm install feg-orc8r $helm_repo/feg-orc8r \
 
 Install fbinternal-orc8r:
 ```bash
-helm install fbinternal-orc8r $helm_repo/fbinternal-orc8r \
+helm upgrade -i fbinternal-orc8r $helm_repo/fbinternal-orc8r \
   --namespace $namespace \
   --set controller.image.repository=$img_repo/controller \
   --set controller.image.tag=$controller_tag
@@ -149,7 +163,7 @@ helm install fbinternal-orc8r $helm_repo/fbinternal-orc8r \
 
 Install wifi-orc8r:
 ```bash
-helm install wifi-orc8r $helm_repo/wifi-orc8r \
+helm upgrade -i wifi-orc8r $helm_repo/wifi-orc8r \
   --namespace $namespace \
   --set controller.image.repository=$img_repo/controller \
   --set controller.image.tag=$controller_tag
@@ -157,7 +171,7 @@ helm install wifi-orc8r $helm_repo/wifi-orc8r \
 
 Install: cwf-orc8r
 ```bash
-helm install cwf-orc8r $helm_repo/cwf-orc8r \
+helm upgrade -i cwf-orc8r $helm_repo/cwf-orc8r \
   --namespace $namespace \
   --set controller.image.repository=$img_repo/controller \
   --set controller.image.tag=$controller_tag
