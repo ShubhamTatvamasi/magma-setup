@@ -14,10 +14,10 @@ export nms_db_user=magma
 export nms_db_pass=password
 export orc8r_db_user=orc8r
 export orc8r_db_pass=password
-export img_repo=shubhamtatvamasi
-export controller_tag=1.4.0
-export nms_tag=1.4.0
-export nginx_tag=1.4.0
+export img_repo=docker.artifactory.magmacore.org
+export controller_tag=1.5.0
+export nms_tag=1.5.0
+export nginx_tag=1.5.0
 export helm_repo=magma-charts-140
 
 $ mkdir $magma_secrets && \

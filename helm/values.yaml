@@ -1,11 +1,14 @@
 nms:
   magmalte:
     image:
-      repository: shubhamtatvamasi/magmalte
-      tag: 1.4.0
+      repository: docker.artifactory.magmacore.org/magmalte
+      tag: 1.5.0
     env:
       mysql_host: mysql.orc8r.svc.cluster.local
       api_host: orc8r-nginx-proxy.orc8r.svc.cluster.local
+      mysql_host: mysql
+      mysql_port: 3306
+      mysql_dialect: mysql
 
   nginx:
     service:
@@ -16,8 +19,8 @@ nms:
 
 nginx:
   image:
-    repository: shubhamtatvamasi/nginx
-    tag: 1.4.0
+    repository: docker.artifactory.magmacore.org/nginx
+    tag: 1.5.0
 
   spec:
     hostname: controller.magma.shubhamtatvamasi.com
@@ -27,8 +30,8 @@ nginx:
 
 controller:
   image:
-    repository: shubhamtatvamasi/controller
-    tag: 1.4.0
+    repository: docker.artifactory.magmacore.org/controller
+    tag: 1.5.0
 
 metrics:
   prometheus:
@@ -342,32 +345,32 @@ secrets:
 
         nms_nginx.pem: |-
           -----BEGIN CERTIFICATE-----
-          MIIEuzCCA6OgAwIBAgISBHI38SRMfVYYPiBCnl9K9IgAMA0GCSqGSIb3DQEBCwUA
+          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
-          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
+          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
-          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
+          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
-          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
+          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
-          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
-          Nm0scRW5z0GTPrbDdQv1
+          ZW5jci5vcmcwIgYIKwYBBQUHMAKGFmh0dHA6Ly9yMy5pLmxlbmNyLm9yZy8wgZUG
+          A1UdEQSBjTCBioIaKi5rOHMuc2h1YmhhbXRhdHZhbWFzaS5jb22CHCoubWFnbWEu
+          c2h1YmhhbXRhdHZhbWFzaS5jb22CICoubm1zLm1hZ21hLnNodWJoYW10YXR2YW1h
+          c2kuY29tghYqLnNodWJoYW10YXR2YW1hc2kuY29tghRzaHViaGFtdGF0dmFtYXNp
+          LmNvbTBMBgNVHSAERTBDMAgGBmeBDAECATA3BgsrBgEEAYLfEwEBATAoMCYGCCsG
+          AQUFBwIBFhpodHRwOi8vY3BzLmxldHNlbmNyeXB0Lm9yZzCCAQMGCisGAQQB1nkC
+          BAIEgfQEgfEA7wB1AFzcQ5L+5qtFRLFemtRW5hA3+9X6R9yhc5SyXub2xw7KAAAB
+          eP12guwAAAQDAEYwRAIgTBwp4rzYbNtG4B5o0aFmSgs/ETrexLBOdLIq0TglR3wC
+          IDPTLHGLKvpYP8Y5SQPymdCbvmSx2//HyUg6KQJWbQwmAHYA9lyUL9F3MCIUVBgI
+          MJRWjuNNExkzv98MLyALzE7xZOMAAAF4/XaC2QAABAMARzBFAiEA/yKIdEtyo1o+
+          fisd7yyYS4tU07/BgNGmBl+EfFqbfUMCIDNHgKGVYXeMyl2zvAsMtRBirvI0dylB
+          71RSAfTU41VoMA0GCSqGSIb3DQEBCwUAA4IBAQCkEQcXHojsclPrSer9CqjDz1Lj
+          kHUemx5/zwk2yC5zeBSpLLiAzhYcbVR+BK9d5RIoM8Kg9SMVyYdtC0hfHF+grdNz
+          cGQbf+awGfdtM0ZaM/GV94Qg65HLyk3EcaNBf7RILuZPcFAgmi1onxovs1EJhgme
+          mVBtOlWI/GJaKk1GaSgkATwd4OBaer1aHE+b0XVMpsEmdT1IFaWL2UTFi/FVYdPm
+          CNSW28BYrKI/QRnrb17hn9x9+KODbafAE+JtNHzC0DFdixfgDqJ2XdF3J3DwjJbX
+          t8IJfxStb+MBn7JlZdUNtFFoNDrprGUrywliX/K0arbYfRpoTVPDfcqclF3T
           -----END CERTIFICATE-----
 
           -----BEGIN CERTIFICATE-----
@@ -398,13 +401,10 @@ secrets:
           -----END CERTIFICATE-----
 
         nms_nginx.key.pem: |-
-          -----BEGIN EC PARAMETERS-----
-          BggqhkjOPQMBBw==
-          -----END EC PARAMETERS-----
           -----BEGIN EC PRIVATE KEY-----
-          MHcCAQEEIKngDklfvD1W1ZzqE3FAn9B+jGCJHXfFNzfLq3iZarZEoAoGCCqGSM49
-          AwEHoUQDQgAE/SC5JDKLiMoltuPWagBkDIOJxT5PogWvjS7Hao5siTO8/lm0LWdn
-          IPacdjdidB2f9cD9Ull23my7QPmlx4FREQ==
+          MHcCAQEEIJ91cYeKAkr4jGsXLHeP8xBjZxrIQtO2gDNZW1LGVz7goAoGCCqGSM49
+          AwEHoUQDQgAEKdD5LIpMdDw/hiYAdRrf1Zbf9BzBcVzmu3dGw4f84qQJjI9fVI4s
+          r84u1w1aaGFuXfV9iKxjyeniqd4yLGBxEw==
           -----END EC PRIVATE KEY-----
 
         bootstrapper.key: |-
