@@ -2,10 +2,10 @@
 
 setup parameters:
 ```bash
-export MAGMA_ROOT=/tmp/magma
+export MAGMA_ROOT=$PWD
 export PUBLISH=$MAGMA_ROOT/orc8r/tools/docker/publish.sh
-export REGISTRY=shubhamtatvamasi
-export MAGMA_TAG=1.4.0
+export REGISTRY=magmacore
+export MAGMA_TAG=1.5.1
 ```
 > comment the docker login part in publish.sh
 
