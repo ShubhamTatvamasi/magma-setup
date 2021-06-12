@@ -39,3 +39,12 @@ docker-compose build --parallel
 for image in cwag_go gateway_pipelined gateway_sessiond ; \
   do ${PUBLISH} -r ${REGISTRY} -i ${image} -v ${MAGMA_TAG} ; done
 ```
+
+build operator image:
+```bash
+cd $MAGMA_ROOT/cwf/k8s/cwf_operator/docker
+docker-compose build
+COMPOSE_PROJECT_NAME=operator ${PUBLISH} -r ${REGISTRY} -i operator -v ${MAGMA_TAG}
+```
+
+
