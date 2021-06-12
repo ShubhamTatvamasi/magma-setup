@@ -24,7 +24,7 @@ docker-compose build magmalte
 COMPOSE_PROJECT_NAME=magmalte ${PUBLISH} -r ${REGISTRY} -i magmalte -v ${MAGMA_TAG}
 ```
 
-Build and push FGA images:
+Build and push Federation Gateway images:
 ```bash
 cd $MAGMA_ROOT/feg/gateway/docker
 docker-compose build --parallel
