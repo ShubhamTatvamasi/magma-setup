@@ -44,7 +44,8 @@ build operator image:
 ```bash
 cd $MAGMA_ROOT/cwf/k8s/cwf_operator/docker
 docker-compose build
-COMPOSE_PROJECT_NAME=operator ${PUBLISH} -r ${REGISTRY} -i operator -v ${MAGMA_TAG}
+for image in operator ; \
+  do ${PUBLISH} -r ${REGISTRY} -i ${image} -v ${MAGMA_TAG} ; done
 ```
 
 
