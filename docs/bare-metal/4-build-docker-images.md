@@ -1,11 +1,17 @@
 # build docker images
 
+Download repo:
+```bash
+wget https://github.com/magma/magma/archive/refs/tags/v1.5.2.zip
+unzip v1.5.2.zip
+```
+
 setup parameters:
 ```bash
 export MAGMA_ROOT=$PWD
 export PUBLISH=$MAGMA_ROOT/orc8r/tools/docker/publish.sh
 export REGISTRY=magmacore
-export MAGMA_TAG=1.5.1
+export MAGMA_TAG=1.5.2
 ```
 > comment the docker login part in publish.sh
 
