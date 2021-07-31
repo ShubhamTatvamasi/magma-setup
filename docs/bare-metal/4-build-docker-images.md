@@ -19,7 +19,7 @@ build and push nginx and controller docker image:
 ```bash
 cd $MAGMA_ROOT/orc8r/cloud/docker
 ./build.py -a
-for image in controller nginx fluentd test ; \
+for image in controller nginx ; \
   do ${PUBLISH} -r ${REGISTRY} -i ${image} -v ${MAGMA_TAG} ; done
 ```
 
