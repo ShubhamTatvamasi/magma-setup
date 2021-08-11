@@ -13,6 +13,7 @@ orc8r_helm_charts=(
   [feg-orc8r]="feg/cloud/helm/feg-orc8r"
   [cwf-orc8r]="cwf/cloud/helm/cwf-orc8r"
   [wifi-orc8r]="wifi/cloud/helm/wifi-orc8r"
+  [orc8r]="orc8r/cloud/helm/orc8r/charts/secrets"
   [fbinternal-orc8r]="fbinternal/cloud/helm/fbinternal-orc8r"
 )
 
